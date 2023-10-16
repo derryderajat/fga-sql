@@ -13,8 +13,8 @@
 
 - [x] Analisa struktur data pada challenge 2
 - [x] Rancang Entity Relationship Diagram (ERD) sederhana yang mencakup tabel-tabel yang diperlukan
-- [ ] Buat file SQL dengan nama create_and_insert.sql
-- [ ] Isi file SQL dengan perintah SQL untuk mengisi beberapa data awal ke dalam tabel-tabel
+- [x] Buat file SQL dengan nama create_and_insert.sql
+- [x] Isi file SQL dengan perintah SQL untuk mengisi beberapa data awal ke dalam tabel-tabel
 
 
 ## Criteria
