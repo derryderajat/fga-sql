@@ -35,9 +35,13 @@ create table if not exists transaksi (
   akun_tujuan varchar(20) 
 );
 
-
+-- Alter table
+-- Tambahkan UNIQUE constraint ke kolom 'nik' yang dihapus dengan deletedat yang tidak null.
+-- alter ini untuk  memastikan bahwa tidak ada dua baris data dengan NIK yang sama yang memiliki nilai deletedat yang tidak null.
 alter table nasabah 
 add constraint uq_nik unique (nik);
+alter table nasabah  
+add constraint uq_id unique (id);
 alter table akun  
 add constraint uq_akun_asal unique (nomor_akun);
 -- alter table set fk
@@ -48,6 +52,14 @@ add constraint fk_transaksi_akun foreign key (akun_asal) references akun (nomor_
 -- alter table modify
 alter table transaksi
 alter column tanggal_transaksi set default now();
+
+-- Indexing
+create index idx_akun_no_akun
+on akun(nomor_akun);
+
+create index idx_tr_tujuan
+on transaksi(akun_tujuan);
+
 
 -- dml
 -- queries insert
@@ -70,6 +82,11 @@ values
 ('25061000000000000003','tabungan', '1658457896251367','421323'), --jesika
 ('25161000000000000003','giro', '1658457896251367','221323'),
 ('25261000000000000001','deposito', '1658457896251367','551232');
+
+-- insert transaksi dimana akun_asal tidak terdatfar (expected error)
+insert into transaksi (jenis_transaksi, jumlah, akun_asal)
+values
+('setoran', 1000000, '25261000000000004001');
 
 -- setoran awal tabungan
 insert into transaksi (jenis_transaksi, jumlah, akun_asal)
@@ -152,10 +169,35 @@ begin
 end;
 $$ language plpgsql;
 
-
 -- memanggil stored procedure
 select getsaldo('25061000000000000001'); -- sambalado
 select getsaldo('25061000000000000002'); -- donny
 select getsaldo('25061000000000000003'); -- jesica tabungan
 select getsaldo('25161000000000000003'); -- jesica tabungan
 select getsaldo('25261000000000000001'); -- jesica deposito
+
+-- Update data nasabah
+update nasabah
+set tempat_lahir ='Medan',
+updatedat=now()
+where id='e136fbc3-b3a7-48ed-b58c-872c4fed7154';
+select * from nasabah n ;
+-- insert new data
+create or replace procedure addClient(name varchar, nik varchar, alamat text, tempat_lahir text, tanggal_lahir date, telephone varchar, nama_ibu_kandung varchar)
+language plpgsql
+as $$
+begin 
+	insert into nasabah (name, nik, alamat, tempat_lahir, tanggal_lahir, telephone, nama_ibu_kandung)
+		values 
+		(name, nik, alamat, tempat_lahir, tanggal_lahir, telephone, nama_ibu_kandung);
+end;$$
+
+call addclient('Derry', '3672051709970003', 'Cilegon', 'Cilegon', '1997-09-17', '089677816465', 'sri') ;
+
+-- delete data nasabah soft delete
+update nasabah set deletedat = now()
+where nik='3672051709970003';
+-- delete data nasabah hard delete
+delete from nasabah
+where nik='3672051709970003';
+select * from nasabah n ;

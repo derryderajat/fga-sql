@@ -7,8 +7,6 @@
 - Optimization
 - RDBMS
 
-
-
 ## Delivery
 
 - [x] Analisa struktur data pada challenge 2
@@ -20,7 +18,7 @@
 ## Criteria
 - [x] Mampu merancang dan membuat ERD (40 points)
 - [x] Membuat Database & tabel menggunakan DDL (30 points)
-- [ ] Melakukan operasi CRUD dengan DML (30 points)
+- [x] Melakukan operasi CRUD dengan DML (30 points)
 
 ## Flowchart
  ![ERD ver1.0](/fga-be.png)
